@@ -11,16 +11,19 @@ The smallest useful setup: five source files plus clasp. What’s in the repo is
 | `JavaScript.html` | `<script>…</script>`, with a `server()` Promise wrapper around `google.script.run` |
 
 ## Setup
+
 ```bash
 npm install
 npm run login
 npx clasp create-script --type standalone --title "My App"   # or: copy .clasp.json.example -> .clasp.json and set scriptId
 npm run push
 ```
+
 Then in the Apps Script editor: **Project Settings > Script properties** → add `SPREADSHEET_ID`, and **Deploy > New deployment > Web app**.
 (Tabs are created automatically from `SCHEMA` on first use.)
 
 ## Conventions
+
 - Functions in `Code.gs` without a trailing `_` are callable from any browser that can open the app. Validate input there.
 - Functions ending in `_` are private and blocked from `google.script.run`. Keep helpers like the DB layer private.
 - Return only JSON-safe values (no `Date` objects) from client-callable functions.
