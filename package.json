@@ -1,0 +1,14 @@
+{
+  "name": "gas-minimal",
+  "private": true,
+  "scripts": {
+    "login": "clasp login",
+    "push": "clasp push",
+    "deploy": "clasp push && clasp deploy",
+    "open": "clasp open-script"
+  },
+  "devDependencies": {
+    "@google/clasp": "^3.4.1",
+    "@types/google-apps-script": "^2.0.13"
+  }
+}
