@@ -1,4 +1,4 @@
-# GAS minimal template
+# gas-sheets-minimal
 
 The smallest useful setup: five source files plus clasp. What’s in the repo is what runs in Apps Script, so there’s nothing to build or debug. Choose this for small internal tools, quick prototypes, or if you edit code in the Apps Script editor. Want real `.ts`/`.css` files and a local dev server? See [`gas-sheets-vite`](https://github.com/lucas-rollin/gas-sheets-vite).
 
