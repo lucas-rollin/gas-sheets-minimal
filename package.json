@@ -1,5 +1,5 @@
 {
-  "name": "gas-minimal",
+  "name": "gas-sheets-minimal",
   "private": true,
   "scripts": {
     "login": "clasp login",
