@@ -1,0 +1,82 @@
+<script>
+  // Promise wrapper: server('listTasks'), server('createTask', title), ...
+  function server(name, ...args) {
+    return new Promise((resolve, reject) => {
+      google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler((err) => reject(new Error(err.message || String(err))))
+        [name](...args);
+    });
+  }
+
+  const form = document.getElementById('add-form');
+  const input = document.getElementById('title');
+  const list = document.getElementById('list');
+  const status = document.getElementById('status');
+  let tasks = [];
+
+  function setStatus(message, isError) {
+    status.textContent = message;
+    status.classList.toggle('error', !!isError);
+  }
+
+  async function run(label, action) {
+    setStatus(label);
+    try {
+      const result = await action();
+      setStatus('');
+      return result;
+    } catch (err) {
+      setStatus(err.message, true);
+    }
+  }
+
+  function render() {
+    list.replaceChildren(...tasks.map((task) => {
+      const li = document.createElement('li');
+      li.classList.toggle('done', task.done);
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = task.done;
+      checkbox.addEventListener('change', async () => {
+        const updated = await run('Saving…', () => server('toggleTask', task.id));
+        if (updated) tasks = tasks.map((t) => (t.id === updated.id ? updated : t));
+        render();
+      });
+
+      const title = document.createElement('span');
+      title.textContent = task.title; // textContent, never innerHTML
+
+      const remove = document.createElement('button');
+      remove.className = 'ghost';
+      remove.textContent = 'Delete';
+      remove.addEventListener('click', async () => {
+        const ok = await run('Deleting…', () => server('deleteTask', task.id).then(() => true));
+        if (ok) tasks = tasks.filter((t) => t.id !== task.id);
+        render();
+      });
+
+      li.append(checkbox, title, remove);
+      return li;
+    }));
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = form.querySelector('button');
+    button.disabled = true;
+    const created = await run('Adding…', () => server('createTask', input.value));
+    button.disabled = false;
+    if (created) {
+      tasks = [...tasks, created];
+      input.value = '';
+      render();
+    }
+  });
+
+  run('Loading…', () => server('listTasks')).then((loaded) => {
+    if (loaded) tasks = loaded;
+    render();
+  });
+</script>

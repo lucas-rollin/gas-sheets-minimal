@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base target="_top">
+    <?!= include('StyleSheet') ?>
+  </head>
+  <body>
+    <main class="app">
+      <h1>Tasks</h1>
+      <form id="add-form" class="add-form">
+        <input id="title" type="text" placeholder="What needs doing?" maxlength="200" autocomplete="off" required>
+        <button type="submit">Add</button>
+      </form>
+      <p id="status" class="status" role="status"></p>
+      <ul id="list" class="list"></ul>
+    </main>
+    <?!= include('JavaScript') ?>
+  </body>
+</html>
